@@ -33,8 +33,12 @@
 </template>
 
 <script>
+import SocialHead from "./SocialHead.vue";
+
 export default {
   name: "EscolherSala",
+
+  components: { SocialHead },
 
   data() {
     return {

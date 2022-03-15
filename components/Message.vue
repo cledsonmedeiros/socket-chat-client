@@ -1,23 +1,35 @@
 <template>
-  <v-card :color="cardColor" v-if="message.tipo === 'mensagem'">
-    <v-card-text>
+  <v-card
+    :color="cardColor"
+    v-if="message.tipo === 'mensagem'"
+    :class="roundedSide"
+  >
+    <v-card-text class="white--text">
       <v-row>
-        <v-col cols="12" class="pb-0 pt-1 d-flex justify-space-between">
-          <b class="orange--text">{{ isFromMe ? "eu" : message.usuario }}</b>
-          <span>{{ new Date(message.dataEpoch).toLocaleString() }}</span>
+        <v-col cols="12" class="pt-1 pb-0">
+          <span>
+            <b class="orange--text">{{ username }}</b
+            >: {{ message.mensagem }}
+          </span>
         </v-col>
-        <v-col cols="12" class="py-0">
-          <b>
-            {{ message.mensagem }}
-          </b>
+        <v-col cols="12" class="pt-0 pb-1 text-right">
+          <span class="overline">
+            {{ timestamp }}
+          </span>
         </v-col>
-        <v-col cols="12" class="pt-2 pb-1"> </v-col>
       </v-row>
     </v-card-text>
   </v-card>
-  <b v-else>
-    {{ message.mensagem }}
-  </b>
+
+  <v-card color="teal" class="rounded-xl" v-else>
+    <v-card-text class="white--text">
+      <v-row>
+        <v-col cols="12" class="py-0 text-center">
+          <b class="caption"> {{ message.mensagem }} às {{ timestamp }} </b>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -35,11 +47,18 @@ export default {
       return this.message.usuario === this.$store.state.usuario;
     },
     cardColor() {
-      if (this.isFromMe) {
-        return "indigo";
-      }
-
-      return null;
+      return this.isFromMe ? "indigo" : null;
+    },
+    roundedSide() {
+      return this.isFromMe
+        ? "rounded-l-xl rounded-tr-xl"
+        : "rounded-r-xl rounded-tl-xl";
+    },
+    username() {
+      return this.isFromMe ? "Eu" : this.message.usuario;
+    },
+    timestamp() {
+      return new Date(this.message.dataEpoch).toLocaleString();
     },
   },
 

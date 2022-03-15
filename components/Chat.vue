@@ -23,19 +23,21 @@
                 :class="{
                   'mt-0': mensagemIndex === 0,
                   'mt-4': mensagemIndex !== 0,
-                  'text-center': mensagem.tipo === 'chatLog',
                 }"
               />
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="12">
-          <v-text-field
+          <v-textarea
             v-model="novaMensagem"
             label="Mensagem"
+            auto-grow
             outlined
             hide-details
             @keypress.enter="enviarMensagem()"
+            rows="1"
+            clearable
           />
         </v-col>
         <v-col cols="12">
@@ -49,8 +51,13 @@
 </template>
 
 <script>
+import SocialHead from "./SocialHead.vue";
+import Message from "./Message.vue";
+
 export default {
   name: "Chat",
+
+  components: { Message, SocialHead },
 
   data() {
     return {
@@ -88,9 +95,8 @@ export default {
 
     this.socket.on("chatLog", (payload) => {
       this.mensagens.push({
-        usuario: payload.usuario,
+        ...payload,
         sala: this.chatInfo.sala,
-        mensagem: payload.mensagem,
         tipo: "chatLog",
       });
 
